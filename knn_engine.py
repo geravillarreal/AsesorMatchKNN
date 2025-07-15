@@ -141,6 +141,10 @@ def _weighted_similarity(p1: dict, p2: dict, spaces: dict) -> float:
     return score
 
 
+def _vectorize_profiles(profiles: list[dict], spaces: dict, key: str) -> np.ndarray:
+    return np.array([_vectorize_attr(p, spaces[key], key) for p in profiles])
+
+
 # ───────────────────────────────────────────────
 # FUNCIÓN PRINCIPAL: GET RECOMMENDATIONS
 # ───────────────────────────────────────────────
@@ -171,15 +175,29 @@ def get_recommendations(student_id: int, top_k: int = TOP_K_DEFAULT) -> list[dic
         # Espacios semánticos
         spaces = _build_spaces(advisors + [student])
 
-        # Calcular score ponderado
+        # Vectorización masiva por atributo para eficiencia
+        vectors = {
+            key: _vectorize_profiles(advisors + [student], spaces, key)
+            for key in WEIGHTS.keys()
+        }
+
+        scores = np.zeros(len(advisors))
+        student_idx = len(advisors)
+        for key, weight in WEIGHTS.items():
+            mat = vectors[key]
+            sv = mat[student_idx].reshape(1, -1)
+            av = mat[:student_idx]
+            sims = cosine_similarity(sv, av)[0]
+            scores += weight * sims
+
         results = [
             {
-                "advisorId": a["user_id"],
-                "name": a["name"],
-                "faculty": a["faculty"],
-                "score": _weighted_similarity(student, a, spaces)
+                "advisorId": advisors[i]["user_id"],
+                "name": advisors[i]["name"],
+                "faculty": advisors[i]["faculty"],
+                "score": scores[i]
             }
-            for a in advisors
+            for i in range(len(advisors))
         ]
 
         return sorted(results, key=lambda x: x["score"], reverse=True)[:top_k]
