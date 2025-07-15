@@ -2,172 +2,187 @@ import pymysql
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-def get_db_connection():
-    return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="admin123",
-        db="asesorapp",
-        cursorclass=pymysql.cursors.DictCursor
-    )
+# ───────────────────────────────────────────────
+# CONFIGURACIÓN
+# ───────────────────────────────────────────────
+DB_CONFIG = dict(
+    host="localhost",
+    user="root",
+    password="admin123",
+    db="asesorapp",
+    cursorclass=pymysql.cursors.DictCursor
+)
 
-def load_profile(cursor, user_id):
-    cursor.execute("SELECT * FROM profile WHERE user_id = %s", (user_id,))
+# Pesos (suma 1.0)  ← ajusta según tu criterio
+WEIGHTS = {
+    "areas":        0.30,
+    "interests":    0.25,
+    "availability": 0.10,
+    "modality":     0.10,
+    "level":        0.05,
+    "language":     0.05,
+    "books":        0.15
+}
+
+TOP_K_DEFAULT = 5   # resultados a devolver
+
+
+# ───────────────────────────────────────────────
+# UTILIDADES DB
+# ───────────────────────────────────────────────
+def get_db_connection():
+    return pymysql.connect(**DB_CONFIG)
+
+
+# ───────────────────────────────────────────────
+# CARGA DE PERFIL (robusta: devuelve None si falta)
+# ───────────────────────────────────────────────
+def load_profile(cursor, user_id: int) -> dict | None:
+    cursor.execute("SELECT * FROM profile WHERE user_id = %s", user_id)
     p = cursor.fetchone()
     if not p:
-        print(f"[WARN] Profile for user {user_id} not found")
+        print(f"[WARN] Perfil NO encontrado para user_id={user_id}")
         return None
 
-    cursor.execute("SELECT areas FROM profile_areas WHERE profile_id = %s", (p["id"],))
+    # ElementCollections
+    cursor.execute("SELECT areas FROM profile_areas WHERE profile_id = %s", p["id"])
     p["areas"] = [r["areas"] for r in cursor.fetchall()]
 
-    cursor.execute("SELECT interests FROM profile_interests WHERE profile_id = %s", (p["id"],))
+    cursor.execute("SELECT interests FROM profile_interests WHERE profile_id = %s", p["id"])
     p["interests"] = [r["interests"] for r in cursor.fetchall()]
 
-    cursor.execute("SELECT availability FROM profile_availability WHERE profile_id = %s", (p["id"],))
+    cursor.execute("SELECT availability FROM profile_availability WHERE profile_id = %s", p["id"])
     p["availability"] = [r["availability"] for r in cursor.fetchall()]
 
-    cursor.execute("SELECT full_name FROM users WHERE id = %s", (user_id,))
-    p["name"] = cursor.fetchone()["full_name"]
-
-    cursor.execute("SELECT title FROM book WHERE profile_id = %s", (p["id"],))
-    p["books"] = [r["title"].lower() for r in cursor.fetchall()] 
-
-    print(p)
-
-    return p
-
-
-def vectorize(profile, areas_set, interests_set, availability_set, levels, modalities, languages, book_keywords):
-    v = []
-    v += [1 if x in profile["areas"] else 0 for x in areas_set]
-    v += [1 if x in profile["interests"] else 0 for x in interests_set]
-    v += [1 if x in profile["availability"] else 0 for x in availability_set]
-    v += [1 if profile["level"] == x else 0 for x in levels]
-    v += [1 if profile["modality"] == x else 0 for x in modalities]
-    v += [1 if profile["language"] == x else 0 for x in languages]
-
-    book_string = " ".join(profile.get("books", []))
-    v += [1 if kw in book_string else 0 for kw in book_keywords]
-
-    return v
-
-import pymysql
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-
-def get_db_connection():
-    return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="admin123",
-        db="asesorapp",
-        cursorclass=pymysql.cursors.DictCursor
-    )
-
-def load_profile(cursor, user_id):
-    cursor.execute("SELECT * FROM profile WHERE user_id = %s", (user_id,))
-    p = cursor.fetchone()
-    if not p:
-        print(f"[WARN] Profile for user {user_id} not found")
-        return None
-
-    cursor.execute("SELECT areas FROM profile_areas WHERE profile_id = %s", (p["id"],))
-    p["areas"] = [r["areas"] for r in cursor.fetchall()]
-
-    cursor.execute("SELECT interests FROM profile_interests WHERE profile_id = %s", (p["id"],))
-    p["interests"] = [r["interests"] for r in cursor.fetchall()]
-
-    cursor.execute("SELECT availability FROM profile_availability WHERE profile_id = %s", (p["id"],))
-    p["availability"] = [r["availability"] for r in cursor.fetchall()]
-
-    cursor.execute("SELECT full_name FROM users WHERE id = %s", (user_id,))
-    result = cursor.fetchone()
-    p["name"] = result["full_name"] if result else "Sin nombre"
-
-    cursor.execute("SELECT title FROM book WHERE profile_id = %s", (p["id"],))
+    # Libros
+    cursor.execute("SELECT title FROM book WHERE profile_id = %s", p["id"])
     p["books"] = [r["title"].lower() for r in cursor.fetchall()]
 
-    p["user_id"] = user_id  # lo necesitas en el resultado final
+    # Nombre (tabla users)
+    cursor.execute("SELECT full_name, faculty FROM users WHERE id = %s", user_id)
+    u = cursor.fetchone() or {}
+    p["name"] = u.get("full_name", "Sin nombre")
+    p["faculty"] = u.get("faculty", "Sin facultad")
+    p["user_id"] = user_id
+    return _fill_missing(p)
 
-    return p
 
-def vectorize(profile, areas_set, interests_set, availability_set, levels, modalities, languages, book_keywords):
-    v = []
-    v += [1 if x in profile["areas"] else 0 for x in areas_set]
-    v += [1 if x in profile["interests"] else 0 for x in interests_set]
-    v += [1 if x in profile["availability"] else 0 for x in availability_set]
-    v += [1 if profile["level"] == x else 0 for x in levels]
-    v += [1 if profile["modality"] == x else 0 for x in modalities]
-    v += [1 if profile["language"] == x else 0 for x in languages]
+# ───────────────────────────────────────────────
+# COMPLETAR ATRIBUTOS FALTANTES
+# ───────────────────────────────────────────────
+def _fill_missing(profile: dict) -> dict:
+    defaults = {
+        "areas": [], "interests": [], "availability": [],
+        "level": "Desconocido", "modality": "Desconocido",
+        "language": "Desconocido", "books": []
+    }
+    for k, v in defaults.items():
+        if k not in profile or profile[k] is None:
+            profile[k] = v
+    return profile
 
-    book_string = " ".join(profile.get("books", []))
-    v += [1 if kw in book_string else 0 for kw in book_keywords]
 
-    return v
+# ───────────────────────────────────────────────
+# ESPACIOS SEMÁNTICOS (vocabularios)
+# ───────────────────────────────────────────────
+def _build_spaces(profiles: list[dict]) -> dict:
+    spaces = {
+        "areas":        sorted({a for p in profiles for a in p["areas"]}),
+        "interests":    sorted({i for p in profiles for i in p["interests"]}),
+        "availability": sorted({av for p in profiles for av in p["availability"]}),
+        "levels":       sorted({p["level"] for p in profiles}),
+        "modalities":   sorted({p["modality"] for p in profiles}),
+        "languages":    sorted({p["language"] for p in profiles}),
+        "books": sorted({
+            w.lower()
+            for p in profiles
+            for t in p["books"]
+            for w in t.split()
+            if len(w) > 3        # omite palabras muy cortas
+        })
+    }
+    # Renombrar plural → singular para simplificar
+    return {
+        "areas": spaces["areas"],
+        "interests": spaces["interests"],
+        "availability": spaces["availability"],
+        "level": spaces["levels"],
+        "modality": spaces["modalities"],
+        "language": spaces["languages"],
+        "books": spaces["books"]
+    }
 
-def get_recommendations(student_id, top_k=5):
+
+# ───────────────────────────────────────────────
+# VECTORIZACIÓN POR ATRIBUTO
+# ───────────────────────────────────────────────
+def _vectorize_attr(profile: dict, space: list[str], key: str) -> list[int]:
+    if key in ("level", "modality", "language"):
+        return [1 if profile[key] == x else 0 for x in space]
+    if key == "books":
+        text = " ".join(profile["books"])
+        return [1 if kw in text else 0 for kw in space]
+    # Listas (areas, interests, availability)
+    return [1 if x in profile[key] else 0 for x in space]
+
+
+# ───────────────────────────────────────────────
+# SIMILITUD PONDERADA ENTRE DOS PERFILES
+# ───────────────────────────────────────────────
+def _weighted_similarity(p1: dict, p2: dict, spaces: dict) -> float:
+    score = 0.0
+    for key, weight in WEIGHTS.items():
+        v1 = np.array([_vectorize_attr(p1, spaces[key], key)])
+        v2 = np.array([_vectorize_attr(p2, spaces[key], key)])
+        # Si ambos vectores son cero → similitud 0
+        if not v1.any() or not v2.any():
+            continue
+        score += weight * cosine_similarity(v1, v2)[0, 0]
+    return score
+
+
+# ───────────────────────────────────────────────
+# FUNCIÓN PRINCIPAL: GET RECOMMENDATIONS
+# ───────────────────────────────────────────────
+def get_recommendations(student_id: int, top_k: int = TOP_K_DEFAULT) -> list[dict]:
     conn = get_db_connection()
     try:
-        with conn.cursor() as cursor:
-            # Cargar perfil del estudiante
-            student = load_profile(cursor, student_id)
+        with conn.cursor() as cur:
+            # Estudiante
+            student = load_profile(cur, student_id)
             if student is None:
-                print(f"[WARN] No se encontró el perfil del estudiante con ID {student_id}.")
+                print(f"[WARN] Estudiante {student_id} sin perfil → retorna lista vacía.")
                 return []
 
-            # Cargar asesores
-            cursor.execute("SELECT id FROM users WHERE role = 'ADVISOR'")
-            advisor_ids = [r["id"] for r in cursor.fetchall()]
+            # Traer IDs de asesores
+            cur.execute("SELECT id FROM users WHERE role = 'ADVISOR'")
+            advisor_ids = [r["id"] for r in cur.fetchall()]
 
-            advisors = []
+            advisors: list[dict] = []
             for aid in advisor_ids:
-                p = load_profile(cursor, aid)
-                if p:
-                    advisors.append(p)
-                else:
-                    print(f"[WARN] Se omitió advisor con ID {aid} por falta de perfil.")
+                prof = load_profile(cur, aid)
+                if prof:
+                    advisors.append(prof)
 
-            if not advisors:
-                print(f"[WARN] No advisor profiles available to compare.")
-                return []
-
-        # Espacios semánticos
-        areas = sorted(set(a for p in advisors + [student] for a in p["areas"]))
-        interests = sorted(set(i for p in advisors + [student] for i in p["interests"]))
-        availability = sorted(set(av for p in advisors + [student] for av in p["availability"]))
-        levels = sorted(set(p["level"] for p in advisors + [student]))
-        modalities = sorted(set(p["modality"] for p in advisors + [student]))
-        languages = sorted(set(p["language"] for p in advisors + [student]))
-
-        book_keywords = sorted(set(
-            word.lower()
-            for p in advisors + [student]
-            for title in p.get("books", [])
-            for word in title.split() if len(word) > 3
-        ))
-
-        # Vectores
-        v_student = np.array([
-            vectorize(student, areas, interests, availability, levels, modalities, languages, book_keywords)
-        ])
-        v_advisors = np.array([
-            vectorize(p, areas, interests, availability, levels, modalities, languages, book_keywords)
-            for p in advisors
-        ])
-
-        if v_advisors.size == 0:
-            print("[ERROR] No valid advisor vectors were generated.")
+        if not advisors:
+            print("[WARN] Sin asesores válidos para comparar.")
             return []
 
-        sims = cosine_similarity(v_student, v_advisors)[0]
-        results = sorted([
-            {"advisorId": p["user_id"], "name": p["name"], "score": float(sim)}
-            for p, sim in zip(advisors, sims)
-        ], key=lambda x: x["score"], reverse=True)
+        # Espacios semánticos
+        spaces = _build_spaces(advisors + [student])
 
-        return results[:top_k]
+        # Calcular score ponderado
+        results = [
+            {
+                "advisorId": a["user_id"],
+                "name": a["name"],
+                "faculty": a["faculty"],
+                "score": _weighted_similarity(student, a, spaces)
+            }
+            for a in advisors
+        ]
+
+        return sorted(results, key=lambda x: x["score"], reverse=True)[:top_k]
 
     finally:
         conn.close()
-
