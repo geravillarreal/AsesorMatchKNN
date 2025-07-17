@@ -1,206 +1,221 @@
 import pymysql
+from typing import List, Dict, Any, Tuple
+
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.model_selection import ParameterGrid
+
+# Multilingual sentence embeddings for automatic synonym / translation handling
+from sentence_transformers import SentenceTransformer
+from functools import lru_cache
+
+"""
+KNN‑BASED ADVISOR RECOMMENDER – SEMANTIC VERSION (safe for empty lists)
+======================================================================
+* Detecta sinónimos / traducciones con embeddings multilingües.
+* Corrige error: evita llamar a cosine_similarity con matrices vacías
+  (tokens únicos ⇒ shape (0, 384)).
+* API sin cambios: `get_recommendations(student_id, top_k=5)`.
+"""
 
 # ───────────────────────────────────────────────
-# CONFIGURACIÓN
+# CONFIGURATION
 # ───────────────────────────────────────────────
 DB_CONFIG = dict(
     host="localhost",
     user="root",
     password="admin123",
     db="asesorapp",
-    cursorclass=pymysql.cursors.DictCursor
+    cursorclass=pymysql.cursors.DictCursor,
 )
 
-# Pesos (suma 1.0)  ← ajusta según tu criterio
-WEIGHTS = {
+ATTRS: Tuple[str, ...] = (
+    "areas",
+    "interests",
+    "language",
+    "availability",
+    "books",
+    "faculty",
+    "modality",
+    "level",
+)
+
+DEFAULT_WEIGHTS: Dict[str, float] = {
     "areas":        0.30,
     "interests":    0.25,
+    "language":     0.15,
     "availability": 0.10,
-    "modality":     0.10,
-    "level":        0.05,
-    "language":     0.05,
-    "books":        0.15
+    "books":        0.10,
+    "faculty":      0.05,
+    "modality":     0.03,
+    "level":        0.02,
 }
 
-TOP_K_DEFAULT = 5   # resultados a devolver
-
+TOP_K_DEFAULT: int = 5
+SIM_THRESHOLD: float = 0.80  # ≥ threshold ⇒ treat words as synonyms
 
 # ───────────────────────────────────────────────
-# UTILIDADES DB
+# EMBEDDING MODEL (lazy)
 # ───────────────────────────────────────────────
-def get_db_connection():
+
+@lru_cache(maxsize=1)
+def _get_emb_model() -> SentenceTransformer:
+    return SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+
+
+def _embed_many(tokens: List[str]) -> np.ndarray:
+    if not tokens:
+        return np.zeros((0, 384))
+    return _get_emb_model().encode(tokens, show_progress_bar=False, normalize_embeddings=True)
+
+# ───────────────────────────────────────────────
+# DB UTILITIES
+# ───────────────────────────────────────────────
+
+def _get_connection():
     return pymysql.connect(**DB_CONFIG)
 
+# ───────────────────────────────────────────────
+# PROFILE LOADING
+# ───────────────────────────────────────────────
 
-# ───────────────────────────────────────────────
-# CARGA DE PERFIL (robusta: devuelve None si falta)
-# ───────────────────────────────────────────────
-def load_profile(cursor, user_id: int) -> dict | None:
-    cursor.execute("SELECT * FROM profile WHERE user_id = %s", user_id)
-    p = cursor.fetchone()
-    if not p:
-        print(f"[WARN] Perfil NO encontrado para user_id={user_id}")
+def _load_profile(cur, user_id: int) -> Dict[str, Any] | None:
+    cur.execute("SELECT * FROM profile WHERE user_id=%s", user_id)
+    p = cur.fetchone()
+    if p is None:
         return None
 
-    # ElementCollections
-    cursor.execute("SELECT areas FROM profile_areas WHERE profile_id = %s", p["id"])
-    p["areas"] = [r["areas"] for r in cursor.fetchall()]
+    def col(sql: str, col_name: str) -> List[str]:
+        cur.execute(sql, p["id"])
+        return [r[col_name] for r in cur.fetchall()]
 
-    cursor.execute("SELECT interests FROM profile_interests WHERE profile_id = %s", p["id"])
-    p["interests"] = [r["interests"] for r in cursor.fetchall()]
+    p["areas"]        = col("SELECT areas FROM profile_areas WHERE profile_id=%s", "areas")
+    p["interests"]    = col("SELECT interests FROM profile_interests WHERE profile_id=%s", "interests")
+    p["availability"] = col("SELECT availability FROM profile_availability WHERE profile_id=%s", "availability")
+    p["books"] = [t.lower() for t in col("SELECT title FROM book WHERE profile_id=%s", "title")]
 
-    cursor.execute("SELECT availability FROM profile_availability WHERE profile_id = %s", p["id"])
-    p["availability"] = [r["availability"] for r in cursor.fetchall()]
-
-    # Libros
-    cursor.execute("SELECT title FROM book WHERE profile_id = %s", p["id"])
-    p["books"] = [r["title"].lower() for r in cursor.fetchall()]
-
-    # Nombre (tabla users)
-    cursor.execute("SELECT full_name, faculty FROM users WHERE id = %s", user_id)
-    u = cursor.fetchone() or {}
-    p["name"] = u.get("full_name", "Sin nombre")
-    p["faculty"] = u.get("faculty", "Sin facultad")
+    cur.execute("SELECT full_name, faculty FROM users WHERE id=%s", user_id)
+    u = cur.fetchone() or {}
+    p["name"]    = u.get("full_name", "NoName")
+    p["faculty"] = u.get("faculty", "Undefined")
     p["user_id"] = user_id
-    return _fill_missing(p)
 
+    for k, v in {"language": "Desconocido", "level": "Desconocido", "modality": "Desconocido"}.items():
+        p.setdefault(k, v)
+    for k in ("areas", "interests", "availability", "books"):
+        p[k] = p.get(k) or []
+    return p
 
 # ───────────────────────────────────────────────
-# COMPLETAR ATRIBUTOS FALTANTES
+# SYNONYM CLUSTERING & CANONICALISATION
 # ───────────────────────────────────────────────
-def _fill_missing(profile: dict) -> dict:
-    defaults = {
-        "areas": [], "interests": [], "availability": [],
-        "level": "Desconocido", "modality": "Desconocido",
-        "language": "Desconocido", "books": []
+
+def _cluster_tokens(tokens: List[str], threshold: float = SIM_THRESHOLD) -> Tuple[Dict[str, str], List[str]]:
+    """Groups tokens into synonym clusters and returns mapping + canonical list."""
+    if not tokens:
+        return {}, []
+    vectors = _embed_many(tokens)
+    canonical: List[str] = []
+    mapping: Dict[str, str] = {}
+    n = len(tokens)
+    for i, tok in enumerate(tokens):
+        if tok in mapping:
+            continue  # already mapped to a canonical token
+        canonical.append(tok)
+        mapping[tok] = tok
+        if i == n - 1:
+            continue  # last token ⇒ no remaining tokens to compare
+        rest = vectors[i + 1 :]
+        if rest.shape[0] == 0:
+            continue  # safety: no vectors left
+        sims = cosine_similarity(vectors[i].reshape(1, -1), rest)[0]
+        for j, sim in enumerate(sims, start=i + 1):
+            if sim >= threshold:
+                mapping[tokens[j]] = tok
+    return mapping, canonical
+
+
+def _canonicalise_profiles(profiles: List[Dict[str, Any]], syn_maps: Dict[str, Dict[str, str]]):
+    for p in profiles:
+        for key in ATTRS:
+            if key not in p:
+                continue
+            if isinstance(p[key], list):
+                p[key] = list({syn_maps[key].get(t.lower(), t.lower()) for t in p[key]})
+            else:
+                p[key] = syn_maps[key].get(str(p[key]).lower(), str(p[key]).lower())
+
+# ───────────────────────────────────────────────
+# FEATURE SPACES (canonical tokens)
+# ───────────────────────────────────────────────
+
+def _build_spaces(profiles: List[Dict[str, Any]]):
+    raw = {
+        "areas":        sorted({t.lower() for p in profiles for t in p["areas"]}),
+        "interests":    sorted({t.lower() for p in profiles for t in p["interests"]}),
+        "availability": sorted({t.lower() for p in profiles for t in p["availability"]}),
+        "language":     sorted({p["language"].lower() for p in profiles}),
+        "modality":     sorted({p["modality"].lower() for p in profiles}),
+        "level":        sorted({p["level"].lower() for p in profiles}),
+        "faculty":      sorted({p["faculty"].lower() for p in profiles}),
+        "books":        sorted({w for p in profiles for t in p["books"] for w in t.split() if len(w) > 3}),
     }
-    for k, v in defaults.items():
-        if k not in profile or profile[k] is None:
-            profile[k] = v
-    return profile
-
-
-# ───────────────────────────────────────────────
-# ESPACIOS SEMÁNTICOS (vocabularios)
-# ───────────────────────────────────────────────
-def _build_spaces(profiles: list[dict]) -> dict:
-    spaces = {
-        "areas":        sorted({a for p in profiles for a in p["areas"]}),
-        "interests":    sorted({i for p in profiles for i in p["interests"]}),
-        "availability": sorted({av for p in profiles for av in p["availability"]}),
-        "levels":       sorted({p["level"] for p in profiles}),
-        "modalities":   sorted({p["modality"] for p in profiles}),
-        "languages":    sorted({p["language"] for p in profiles}),
-        "books": sorted({
-            w.lower()
-            for p in profiles
-            for t in p["books"]
-            for w in t.split()
-            if len(w) > 3        # omite palabras muy cortas
-        })
-    }
-    # Renombrar plural → singular para simplificar
-    return {
-        "areas": spaces["areas"],
-        "interests": spaces["interests"],
-        "availability": spaces["availability"],
-        "level": spaces["levels"],
-        "modality": spaces["modalities"],
-        "language": spaces["languages"],
-        "books": spaces["books"]
-    }
-
+    syn_maps, spaces = {}, {}
+    for key, tokens in raw.items():
+        mp, canon = _cluster_tokens(tokens)
+        syn_maps[key] = mp
+        spaces[key] = canon
+    _canonicalise_profiles(profiles, syn_maps)
+    return spaces
 
 # ───────────────────────────────────────────────
-# VECTORIZACIÓN POR ATRIBUTO
+# VECTORIZATION (binary)
 # ───────────────────────────────────────────────
-def _vectorize_attr(profile: dict, space: list[str], key: str) -> list[int]:
-    if key in ("level", "modality", "language"):
-        return [1 if profile[key] == x else 0 for x in space]
+
+def _vectorize(p: Dict[str, Any], space: List[str], key: str) -> np.ndarray:
+    if key in ("language", "modality", "level", "faculty"):
+        return np.array([1 if p[key] == t else 0 for t in space])
     if key == "books":
-        text = " ".join(profile["books"])
-        return [1 if kw in text else 0 for kw in space]
-    # Listas (areas, interests, availability)
-    return [1 if x in profile[key] else 0 for x in space]
-
+        text = " ".join(p[key])
+        return np.array([1 if t in text else 0 for t in space])
+    return np.array([1 if t in p[key] else 0 for t in space])
 
 # ───────────────────────────────────────────────
-# SIMILITUD PONDERADA ENTRE DOS PERFILES
+# SIMILARITY
 # ───────────────────────────────────────────────
-def _weighted_similarity(p1: dict, p2: dict, spaces: dict) -> float:
+
+def _similarity(p1: Dict[str, Any], p2: Dict[str, Any], spaces: Dict[str, List[str]], wts: Dict[str, float]) -> float:
     score = 0.0
-    for key, weight in WEIGHTS.items():
-        v1 = np.array([_vectorize_attr(p1, spaces[key], key)])
-        v2 = np.array([_vectorize_attr(p2, spaces[key], key)])
-        # Si ambos vectores son cero → similitud 0
-        if not v1.any() or not v2.any():
+    for k, w in wts.items():
+        v1, v2 = _vectorize(p1, spaces[k], k), _vectorize(p2, spaces[k], k)
+        if not np.any(v1) or not np.any(v2):
             continue
-        score += weight * cosine_similarity(v1, v2)[0, 0]
+        score += w * cosine_similarity([v1], [v2])[0][0]
     return score
 
-
-def _vectorize_profiles(profiles: list[dict], spaces: dict, key: str) -> np.ndarray:
-    return np.array([_vectorize_attr(p, spaces[key], key) for p in profiles])
-
-
 # ───────────────────────────────────────────────
-# FUNCIÓN PRINCIPAL: GET RECOMMENDATIONS
+# MAIN ENTRY POINT
 # ───────────────────────────────────────────────
-def get_recommendations(student_id: int, top_k: int = TOP_K_DEFAULT) -> list[dict]:
-    conn = get_db_connection()
+
+def get_recommendations(student_id: int, top_k: int = TOP_K_DEFAULT, weights: Dict[str, float] | None = None):
+    weights = weights or DEFAULT_WEIGHTS
+    conn = _get_connection()
     try:
         with conn.cursor() as cur:
-            # Estudiante
-            student = load_profile(cur, student_id)
+            student = _load_profile(cur, student_id)
             if student is None:
-                print(f"[WARN] Estudiante {student_id} sin perfil → retorna lista vacía.")
                 return []
-
-            # Traer IDs de asesores
-            cur.execute("SELECT id FROM users WHERE role = 'ADVISOR'")
-            advisor_ids = [r["id"] for r in cur.fetchall()]
-
-            advisors: list[dict] = []
-            for aid in advisor_ids:
-                prof = load_profile(cur, aid)
-                if prof:
-                    advisors.append(prof)
-
+            cur.execute("SELECT id FROM users WHERE role='ADVISOR'")
+            advisors = [_load_profile(cur, r["id"]) for r in cur.fetchall()]
+            advisors = [a for a in advisors if a]
         if not advisors:
-            print("[WARN] Sin asesores válidos para comparar.")
             return []
-
-        # Espacios semánticos
         spaces = _build_spaces(advisors + [student])
-
-        # Vectorización masiva por atributo para eficiencia
-        vectors = {
-            key: _vectorize_profiles(advisors + [student], spaces, key)
-            for key in WEIGHTS.keys()
-        }
-
-        scores = np.zeros(len(advisors))
-        student_idx = len(advisors)
-        for key, weight in WEIGHTS.items():
-            mat = vectors[key]
-            sv = mat[student_idx].reshape(1, -1)
-            av = mat[:student_idx]
-            sims = cosine_similarity(sv, av)[0]
-            scores += weight * sims
-
-        results = [
-            {
-                "advisorId": advisors[i]["user_id"],
-                "name": advisors[i]["name"],
-                "faculty": advisors[i]["faculty"],
-                "score": scores[i]
-            }
-            for i in range(len(advisors))
-        ]
-
-        return sorted(results, key=lambda x: x["score"], reverse=True)[:top_k]
-
+        sims = [_similarity(student, adv, spaces, weights) for adv in advisors]
+        ranked = sorted(
+            ({"advisorId": adv["user_id"], "name": adv["name"], "faculty": adv["faculty"], "score": round(s, 4)}
+             for adv, s in zip(advisors, sims)),
+            key=lambda x: x["score"], reverse=True)
+        return ranked[:top_k]
     finally:
         conn.close()
