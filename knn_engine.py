@@ -10,14 +10,39 @@ import numpy as np
 import pymysql  # type: ignore
 from sentence_transformers import SentenceTransformer, util  # type: ignore
 from symspellpy import SymSpell, Verbosity  # type: ignore
+import urllib.request
+
+# -------------------------------------------------------------
+# Descargar y cargar diccionarios SymSpell
+# -------------------------------------------------------------
+def _ensure_symspell_dicts():
+    dicts = {
+        "frequency_dictionary_en_82_765.txt":
+            "https://raw.githubusercontent.com/mammothb/symspellpy/master/symspellpy/frequency_dictionary_en_82_765.txt",
+        "frequency_dictionary_es_50k.txt":
+            "https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/es/es_50k.txt",
+    }
+    os.makedirs("dictionaries", exist_ok=True)
+    for filename, url in dicts.items():
+        path = os.path.join("dictionaries", filename)
+        if not os.path.exists(path):
+            print(f"Descargando {filename} desde {url}...")
+            urllib.request.urlretrieve(url, path)
+        else:
+            print(f"{filename} ya existe.")
+
+def _init_symspell() -> SymSpell:
+    _ensure_symspell_dicts()
+    sym = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+    sym.load_dictionary("dictionaries/frequency_dictionary_en_82_765.txt", 0, 1)
+    sym.load_dictionary("dictionaries/frequency_dictionary_es_50k.txt", 0, 1)
+    return sym
 
 # -------------------------------------------------------------
 # Models & constants
 # -------------------------------------------------------------
 _MODEL = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
-_SYM = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
-_SYM.load_dictionary("frequency_dictionary_en_82_765.txt", 0, 1)
-_SYM.load_dictionary("frequency_dictionary_es_50k.txt", 0, 1)
+_SYM = _init_symspell()
 
 _SIM_TH: float = 0.80  # semantic threshold
 _WEIGHTS: Dict[str, float] = {"topics": 0.70, "availability": 0.15, "language": 0.15}
@@ -33,12 +58,10 @@ _DB_CFG = {
 # -------------------------------------------------------------
 # Normalisation helpers
 # -------------------------------------------------------------
-
 def _strip_accents(txt: str) -> str:
     return "".join(
         c for c in unicodedata.normalize("NFKD", txt) if not unicodedata.combining(c)
     )
-
 
 def _norm(tok: str) -> str:
     tok = _strip_accents(tok.strip().lower())
@@ -47,14 +70,11 @@ def _norm(tok: str) -> str:
         tok = sugg[0].term
     return tok
 
-
 @lru_cache(maxsize=10_000)
-def _emb(term: str) -> np.ndarray:  # noqa: D401
+def _emb(term: str) -> np.ndarray:
     return _MODEL.encode(term, normalize_embeddings=True)
 
-
 def _canon(lst: List[str]) -> List[str]:
-    """Deduplicate list using semantic similarity."""
     out: List[str] = []
     for raw in lst:
         t = _norm(raw)
@@ -67,21 +87,16 @@ def _canon(lst: List[str]) -> List[str]:
 # -------------------------------------------------------------
 # Similarity helpers
 # -------------------------------------------------------------
-
 def _coverage(student: List[str], advisor: List[str]) -> float:
-    """|A∩B| / |B| with lexical and semantic matching."""
     if not student or not advisor:
         return 0.0
-
     s_tokens = student
     s_embs = [_emb(t) for t in s_tokens]
     hits = 0
     for adv_tok in advisor:
-        # lexical containment (e.g. "quimica" in "quimica organica")
         if any(adv_tok in s or s in adv_tok for s in s_tokens):
             hits += 1
             continue
-        # semantic containment
         if util.cos_sim(_emb(adv_tok), s_embs).max().item() >= _SIM_TH:
             hits += 1
     return hits / len(advisor)
@@ -89,7 +104,6 @@ def _coverage(student: List[str], advisor: List[str]) -> float:
 # -------------------------------------------------------------
 # Profile construction
 # -------------------------------------------------------------
-
 def _load_profile(cur, uid: int) -> Dict[str, Any]:
     cur.execute("SELECT * FROM profile WHERE user_id=%s", uid)
     base = cur.fetchone() or {}
@@ -123,19 +137,15 @@ def _load_profile(cur, uid: int) -> Dict[str, Any]:
 # -------------------------------------------------------------
 # Scoring
 # -------------------------------------------------------------
-
 def _list_match(a: List[str], b: List[str]) -> bool:
     return bool(a and b and any(x == y for x in a for y in b))
-
 
 def _score(st: Dict[str, Any], ad: Dict[str, Any]) -> float:
     cov = _coverage(st["topics"], ad["topics"])
     if cov == 0:
-        return 0.0  # skip unrelated advisor
-
+        return 0.0
     avail = 1.0 if _list_match(st["availability"], ad["availability"]) else 0.0
     lang = 1.0 if _list_match(st["language"], ad["language"]) else 0.0
-
     return (
         cov * _WEIGHTS["topics"]
         + avail * _WEIGHTS["availability"]
@@ -145,8 +155,7 @@ def _score(st: Dict[str, Any], ad: Dict[str, Any]) -> float:
 # -------------------------------------------------------------
 # Plot helper
 # -------------------------------------------------------------
-
-def _plot(title: str, ranked: List[Dict[str, Any]]):  # noqa: D401
+def _plot(title: str, ranked: List[Dict[str, Any]]):
     labels = [title] + [r["name"] or str(r["advisorId"]) for r in ranked]
     vals = [1.0] + [r["score"] for r in ranked]
     plt.figure(figsize=(6, 0.6 * len(labels) + 2))
@@ -158,7 +167,6 @@ def _plot(title: str, ranked: List[Dict[str, Any]]):  # noqa: D401
 # -------------------------------------------------------------
 # Public API
 # -------------------------------------------------------------
-
 def get_recommendations(student_id: int, top_k: int = 5, plot: bool = False):
     con = pymysql.connect(**_DB_CFG)
     try:
