@@ -4,7 +4,7 @@ from functools import wraps
 from typing import Any, Dict
 
 import jwt
-from flask import request
+import flask
 from werkzeug.exceptions import Unauthorized, BadRequest
 
 SECRET_KEY = os.getenv("JWT_SECRET", "secret")
@@ -30,11 +30,11 @@ def verify_token(token: str) -> Dict[str, Any]:
 def auth_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        auth_header = request.headers.get("Authorization")
+        auth_header = flask.request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
             raise Unauthorized("Missing token")
         token = auth_header.split(" ", 1)[1]
-        request.user = verify_token(token)
+        flask.request.user = verify_token(token)
         return func(*args, **kwargs)
 
     return wrapper

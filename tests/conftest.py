@@ -2,20 +2,35 @@ import sys
 import types
 
 class DummyNumpy:
+    class Scalar(float):
+        def item(self):
+            return float(self)
+
+    class DummyArray(list):
+        def max(self):
+            return DummyNumpy.Scalar(max(self))
+
+        def item(self):
+            return self[0] if self else None
+
     @staticmethod
     def array(lst):
-        return list(lst)
+        return DummyNumpy.DummyArray(lst)
 
     @staticmethod
     def zeros(n):
-        return [0.0] * n
+        return DummyNumpy.DummyArray([0.0] * n)
 
     @staticmethod
     def dot(a, b):
+        if a and isinstance(a[0], list):
+            return [sum(x * y for x, y in zip(row, b)) for row in a]
         return sum(x * y for x, y in zip(a, b))
 
     @staticmethod
     def atleast_2d(arr):
+        if arr and isinstance(arr[0], list):
+            return arr
         return [arr]
 
 numpy_mod = types.ModuleType('numpy')
@@ -71,13 +86,16 @@ class HTTPException(Exception):
     def __init__(self, description=None, code=None):
         super().__init__(description)
         self.description = description
-        self.code = code
+        if code is not None:
+            self.code = code
 class BadRequest(HTTPException):
-    pass
+    code = 400
+
 class NotFound(HTTPException):
-    pass
+    code = 404
+
 class Unauthorized(HTTPException):
-    pass
+    code = 401
 exceptions_mod.HTTPException = HTTPException
 exceptions_mod.BadRequest = BadRequest
 exceptions_mod.NotFound = NotFound
@@ -103,8 +121,8 @@ def patch_dependencies():
             return mapping.get(term, np.zeros(2))
     def cos_sim(a, b):
         b = np.atleast_2d(b)
-        sims = np.dot(b, a)
-        return np.array([sims])
+        sims = [np.dot(row, a) for row in b]
+        return np.array(sims)
     st_mod.SentenceTransformer = lambda *a, **k: DummyModel()
     st_mod.util = types.SimpleNamespace(cos_sim=cos_sim)
     sys.modules['sentence_transformers'] = st_mod

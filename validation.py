@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
 from werkzeug.exceptions import BadRequest
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
 
 class MatchRequest(BaseModel):
@@ -20,5 +20,5 @@ def validate_match_request(data: Dict[str, Any] | None) -> MatchRequest:
         raise BadRequest("Invalid JSON body")
     try:
         return MatchRequest(**data)
-    except ValidationError as e:
+    except Exception as e:
         raise BadRequest(str(e))
