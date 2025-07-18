@@ -97,6 +97,12 @@ class Flask:
         elif isinstance(body, bytes):
             body_bytes = body
             headers = [('Content-Type', 'application/octet-stream')]
+        elif isinstance(body, str):
+            body_bytes = body.encode()
+            if body.lstrip().startswith('<'):
+                headers = [('Content-Type', 'text/html')]
+            else:
+                headers = [('Content-Type', 'text/plain')]
         else:
             body_bytes = str(body).encode()
             headers = [('Content-Type', 'text/plain')]
