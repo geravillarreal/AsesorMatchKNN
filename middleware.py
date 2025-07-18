@@ -1,5 +1,5 @@
-from flask import request
+import flask
 
 def log_request() -> None:
     """Simple middleware to log incoming requests."""
-    print(f"{request.method} {request.path}")
+    print(f"{flask.request.method} {flask.request.path}")
