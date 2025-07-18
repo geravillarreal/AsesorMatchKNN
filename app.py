@@ -134,4 +134,5 @@ def docs():
     """
 
 if __name__ == "__main__":
+    print("API lista y escuchando en http://localhost:8000")
     app.run(debug=True, port=8000)
