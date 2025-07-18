@@ -14,6 +14,60 @@ app = flask.Flask(__name__)
 app.before_request(log_request)
 
 
+@app.route("/", methods=["GET"])
+def index():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <title>AsesorMatch UI</title>
+    </head>
+    <body>
+        <h1>AsesorMatch</h1>
+        <div>
+            <h2>Login</h2>
+            <input id='userId' placeholder='User ID'>
+            <button onclick='login()'>Login</button>
+            <div id='loginStatus'></div>
+        </div>
+        <div>
+            <h2>Calcular recomendaciones</h2>
+            <input id='studentId' placeholder='Student ID'>
+            <button onclick='calculate()'>Calcular</button>
+            <pre id='results'></pre>
+        </div>
+        <script>
+        let token = '';
+        function login() {
+            const uid = document.getElementById('userId').value;
+            fetch('/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({userId: parseInt(uid)})
+            }).then(r => r.json())
+              .then(d => { token = d.token; document.getElementById('loginStatus').innerText = 'Token obtenido'; })
+              .catch(() => alert('Error en login'));
+        }
+        function calculate() {
+            const sid = document.getElementById('studentId').value;
+            fetch('/match/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({studentId: parseInt(sid)})
+            }).then(r => r.json())
+              .then(d => { document.getElementById('results').innerText = JSON.stringify(d, null, 2); })
+              .catch(() => alert('Error en cálculo'));
+        }
+        </script>
+    </body>
+    </html>
+    """
+
+
 @app.errorhandler(HTTPException)
 def handle_http_error(error):
     return jsonify({"error": error.description}), error.code
