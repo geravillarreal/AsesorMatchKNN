@@ -39,7 +39,13 @@ def test_match_endpoint():
     server.start()
     time.sleep(0.2)
     try:
-        resp = requests.post(f"http://{server.host}:{server.port}/match/calculate", json={"studentId": 1})
+        token = requests.post(f"http://{server.host}:{server.port}/login", json={"userId": 1}).json()["token"]
+        headers = {"Authorization": f"Bearer {token}"}
+        resp = requests.post(
+            f"http://{server.host}:{server.port}/match/calculate",
+            json={"studentId": 1},
+            headers=headers,
+        )
         assert resp.status_code == 200
         assert resp.json() == [{"advisorId": 1, "name": "a", "score": 0.9}]
     finally:
@@ -53,7 +59,13 @@ def test_match_bad_request():
     server.start()
     time.sleep(0.2)
     try:
-        resp = requests.post(f"http://{server.host}:{server.port}/match/calculate", json={})
+        token = requests.post(f"http://{server.host}:{server.port}/login", json={"userId": 1}).json()["token"]
+        headers = {"Authorization": f"Bearer {token}"}
+        resp = requests.post(
+            f"http://{server.host}:{server.port}/match/calculate",
+            json={},
+            headers=headers,
+        )
         assert resp.status_code == 400
     finally:
         server.shutdown()
