@@ -100,11 +100,14 @@ def match():
     data = flask.request.get_json()
     req = validate_match_request(data)
     try:
-        recommendations = get_recommendations(req.studentId)
+        results = get_recommendations(student_id=req.studentId, top_k=5)
     except ValueError as e:
         raise NotFound(str(e))
-    rec_objs = [Recommendation(**r).dict() for r in recommendations]
-    return jsonify(rec_objs)
+    
+    payload = [Recommendation(advisorId=r["advisorId"], name=r["name"], score=r["score"]).model_dump()
+               for r in results]
+
+    return jsonify(payload), 200
 
 
 @app.route("/openapi.json", methods=["GET"])
