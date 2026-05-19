@@ -1,0 +1,12 @@
+TABLE_NAME,columns
+book,"id, description, title, profile_id"
+feedback,"id, comment, created_at, rating, from_user_id, project_id, to_user_id"
+matches,"id, algorithm_used, compatibility_score, created_at, status, advisor_id, student_id"
+notifications,"id, created_at, message, is_read, user_id"
+profile,"id, language, level, modality, user_id"
+profile_areas,"profile_id, areas"
+profile_availability,"profile_id, availability"
+profile_interests,"profile_id, interests"
+projects,"id, deleted, description, start_date, status, title, advisor_id, rejected_by_advisor_id, student_id"
+stories,"id, created_at, description, status, title, author_id, project_id"
+users,"id, email, faculty, full_name, last_login, role, university_id"

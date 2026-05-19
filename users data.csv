@@ -1,0 +1,222 @@
+full_name,email,role,language,level,modality,areas,interests,availability
+"Patricia Sánchez",patricia.sanchez@uni.edu,ADVISOR,Español,Maestría,Remoto,Java,"Frameworks Spring",Mañana
+"Patricia Sánchez",patricia.sanchez@uni.edu,ADVISOR,Español,Maestría,Remoto,Java,"Desarrollo Backend",Mañana
+"Isabel Herrera",isabel.herrera@uni.edu,ADVISOR,Español,Doctorado,Remoto,C#,"Programación Funcional",Tarde
+"Isabel Herrera",isabel.herrera@uni.edu,ADVISOR,Español,Doctorado,Remoto,C#,"Programación Funcional",Mañana
+"Isabel Herrera",isabel.herrera@uni.edu,ADVISOR,Español,Doctorado,Remoto,C#,"Programación Funcional",Noche
+"Isabel Herrera",isabel.herrera@uni.edu,ADVISOR,Español,Doctorado,Remoto,C#,LINQ,Tarde
+"Isabel Herrera",isabel.herrera@uni.edu,ADVISOR,Español,Doctorado,Remoto,C#,LINQ,Mañana
+"Isabel Herrera",isabel.herrera@uni.edu,ADVISOR,Español,Doctorado,Remoto,C#,LINQ,Noche
+"Fernando Benítez",fernando.benitez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura de Software","Patrones de Arquitectura",Mañana
+"Fernando Benítez",fernando.benitez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura de Software","Patrones de Arquitectura",Tarde
+"Fernando Benítez",fernando.benitez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura de Software","Patrones de Arquitectura",Noche
+"Fernando Benítez",fernando.benitez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura de Software","Domain Driven Design",Mañana
+"Fernando Benítez",fernando.benitez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura de Software","Domain Driven Design",Tarde
+"Fernando Benítez",fernando.benitez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura de Software","Domain Driven Design",Noche
+"Diana Salinas",diana.salinas@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Python,"Ciencia de Datos",Noche
+"Diana Salinas",diana.salinas@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Python,Automatización,Noche
+"César Bautista",cesar.bautista@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Bases de Datos","Administración de Bases de Datos",Tarde
+"César Bautista",cesar.bautista@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Bases de Datos","SQL Avanzado",Tarde
+"Gabriela Gómez",gabriela.gomez@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Desarrollo Web",React,Tarde
+"Gabriela Gómez",gabriela.gomez@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Desarrollo Web",React,Noche
+"Gabriela Gómez",gabriela.gomez@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Desarrollo Web",Node.js,Tarde
+"Gabriela Gómez",gabriela.gomez@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Desarrollo Web",Node.js,Noche
+"Carla Gallardo",carla.gallardo@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Inteligencia Artificial","Aprendizaje Profundo",Mañana
+"Carla Gallardo",carla.gallardo@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Inteligencia Artificial","Aprendizaje Profundo",Tarde
+"Carla Gallardo",carla.gallardo@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Inteligencia Artificial","Visión Computacional",Mañana
+"Carla Gallardo",carla.gallardo@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Inteligencia Artificial","Visión Computacional",Tarde
+"Patricia Quintana",patricia.quintana@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Seguridad Informática",Criptografía,Mañana
+"Patricia Quintana",patricia.quintana@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Seguridad Informática",Criptografía,Noche
+"Patricia Quintana",patricia.quintana@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Seguridad Informática",Criptografía,Tarde
+"Patricia Quintana",patricia.quintana@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Seguridad Informática","Auditoría de Seguridad",Mañana
+"Patricia Quintana",patricia.quintana@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Seguridad Informática","Auditoría de Seguridad",Noche
+"Patricia Quintana",patricia.quintana@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Seguridad Informática","Auditoría de Seguridad",Tarde
+"Yesenia Luna",yesenia.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Desarrollo Móvil","Aplicaciones Android",Tarde
+"Yesenia Luna",yesenia.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Desarrollo Móvil",Flutter,Tarde
+"Sara Mendoza",sara.mendoza@uni.edu,ADVISOR,Español,Maestría,Presencial,DevOps,"Integración Continua",Tarde
+"Sara Mendoza",sara.mendoza@uni.edu,ADVISOR,Español,Maestría,Presencial,DevOps,Contenedores,Tarde
+"Xavier Benítez",xavier.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Computación en la Nube",AWS,Noche
+"Xavier Benítez",xavier.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Computación en la Nube",AWS,Mañana
+"Xavier Benítez",xavier.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Computación en la Nube",AWS,Tarde
+"Xavier Benítez",xavier.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Computación en la Nube",Azure,Noche
+"Xavier Benítez",xavier.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Computación en la Nube",Azure,Mañana
+"Xavier Benítez",xavier.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Computación en la Nube",Azure,Tarde
+"Julia Gallardo",julia.gallardo@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Testing y QA","Pruebas Unitarias",Tarde
+"Julia Gallardo",julia.gallardo@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Testing y QA","Pruebas Unitarias",Noche
+"Julia Gallardo",julia.gallardo@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Testing y QA","Automatización de QA",Tarde
+"Julia Gallardo",julia.gallardo@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Testing y QA","Automatización de QA",Noche
+"Patricia Escobar",patricia.escobar@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Diseño de Interfaces",UX/UI,Tarde
+"Patricia Escobar",patricia.escobar@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Diseño de Interfaces",UX/UI,Mañana
+"Patricia Escobar",patricia.escobar@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Diseño de Interfaces",UX/UI,Noche
+"Patricia Escobar",patricia.escobar@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Diseño de Interfaces","Accesibilidad Web",Tarde
+"Patricia Escobar",patricia.escobar@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Diseño de Interfaces","Accesibilidad Web",Mañana
+"Patricia Escobar",patricia.escobar@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Diseño de Interfaces","Accesibilidad Web",Noche
+"Carla Romero",carla.romero@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Big Data","Procesamiento de Datos",Mañana
+"Carla Romero",carla.romero@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Big Data","Clústeres Hadoop",Mañana
+"Laura Faro",laura.faro@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Microservicios,"Servicios REST",Tarde
+"Laura Faro",laura.faro@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Microservicios,"Servicios REST",Noche
+"Laura Faro",laura.faro@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Microservicios,"Servicios REST",Mañana
+"Laura Faro",laura.faro@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Microservicios,"Orquestación de Microservicios",Tarde
+"Laura Faro",laura.faro@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Microservicios,"Orquestación de Microservicios",Noche
+"Laura Faro",laura.faro@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Microservicios,"Orquestación de Microservicios",Mañana
+"Javier Flores",javier.flores@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Álgebra Lineal","Álgebra Lineal",Noche
+"Javier Flores",javier.flores@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Álgebra Lineal","Álgebra Lineal",Tarde
+"Javier Flores",javier.flores@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Álgebra Lineal","Álgebra Lineal",Mañana
+"Javier Flores",javier.flores@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Álgebra Lineal","Teoría de Grupos",Noche
+"Javier Flores",javier.flores@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Álgebra Lineal","Teoría de Grupos",Tarde
+"Javier Flores",javier.flores@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Álgebra Lineal","Teoría de Grupos",Mañana
+"Manuel Valenzuela",manuel.valenzuela@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Cálculo Diferencial","Cálculo Diferencial",Noche
+"Manuel Valenzuela",manuel.valenzuela@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Cálculo Diferencial","Ecuaciones Diferenciales",Noche
+"Gerardo Gómez",gerardo.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,Estadística,Estadística,Noche
+"Gerardo Gómez",gerardo.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,Estadística,Probabilidad,Noche
+"Karla Delgado",karla.delgado@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Geometría Euclidiana","Geometría Euclidiana",Tarde
+"Karla Delgado",karla.delgado@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Geometría Euclidiana","Geometría Euclidiana",Noche
+"Karla Delgado",karla.delgado@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Geometría Euclidiana",Topología,Tarde
+"Karla Delgado",karla.delgado@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Geometría Euclidiana",Topología,Noche
+"Ignacio Flores",ignacio.flores@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Matemática Discreta","Matemática Discreta",Noche
+"Ignacio Flores",ignacio.flores@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Matemática Discreta","Matemática Discreta",Mañana
+"Ignacio Flores",ignacio.flores@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Matemática Discreta","Matemática Discreta",Tarde
+"Ignacio Flores",ignacio.flores@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Matemática Discreta",Grafos,Noche
+"Ignacio Flores",ignacio.flores@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Matemática Discreta",Grafos,Mañana
+"Ignacio Flores",ignacio.flores@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Matemática Discreta",Grafos,Tarde
+"Yesenia Silva",yesenia.silva@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Cirugía General","Cirugía General",Tarde
+"Yesenia Silva",yesenia.silva@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Cirugía General","Cirugía General",Mañana
+"Yesenia Silva",yesenia.silva@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Cirugía General",Laparoscopía,Tarde
+"Yesenia Silva",yesenia.silva@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Cirugía General",Laparoscopía,Mañana
+"Esteban Hernández",esteban.hernandez@uni.edu,ADVISOR,Español,Maestría,Presencial,Neonatología,Neonatología,Mañana
+"Esteban Hernández",esteban.hernandez@uni.edu,ADVISOR,Español,Maestría,Presencial,Neonatología,Neonatología,Noche
+"Esteban Hernández",esteban.hernandez@uni.edu,ADVISOR,Español,Maestría,Presencial,Neonatología,Neonatología,Tarde
+"Esteban Hernández",esteban.hernandez@uni.edu,ADVISOR,Español,Maestría,Presencial,Neonatología,Vacunación,Mañana
+"Esteban Hernández",esteban.hernandez@uni.edu,ADVISOR,Español,Maestría,Presencial,Neonatología,Vacunación,Noche
+"Esteban Hernández",esteban.hernandez@uni.edu,ADVISOR,Español,Maestría,Presencial,Neonatología,Vacunación,Tarde
+"Patricia Ortiz",patricia.ortiz@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Cardiología Intervencionista","Cardiología Intervencionista",Tarde
+"Patricia Ortiz",patricia.ortiz@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Cardiología Intervencionista",Electrocardiografía,Tarde
+"Ximena Rivera",ximena.rivera@uni.edu,ADVISOR,Español,Doctorado,Presencial,Neurocirugía,Neurocirugía,Tarde
+"Ximena Rivera",ximena.rivera@uni.edu,ADVISOR,Español,Doctorado,Presencial,Neurocirugía,Neurocirugía,Noche
+"Ximena Rivera",ximena.rivera@uni.edu,ADVISOR,Español,Doctorado,Presencial,Neurocirugía,Neurocirugía,Mañana
+"Ximena Rivera",ximena.rivera@uni.edu,ADVISOR,Español,Doctorado,Presencial,Neurocirugía,"Trastornos Neurológicos",Tarde
+"Ximena Rivera",ximena.rivera@uni.edu,ADVISOR,Español,Doctorado,Presencial,Neurocirugía,"Trastornos Neurológicos",Noche
+"Ximena Rivera",ximena.rivera@uni.edu,ADVISOR,Español,Doctorado,Presencial,Neurocirugía,"Trastornos Neurológicos",Mañana
+"Héctor Estrada",hector.estrada@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Ginecología Oncológica","Ginecología Oncológica",Mañana
+"Héctor Estrada",hector.estrada@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Ginecología Oncológica","Salud Reproductiva",Mañana
+"Laura Gómez",laura.gomez@uni.edu,ADVISOR,Español,Maestría,Remoto,"Oncología Clínica","Oncología Clínica",Noche
+"Laura Gómez",laura.gomez@uni.edu,ADVISOR,Español,Maestría,Remoto,"Oncología Clínica",Quimioterapia,Noche
+"Yesenia Díaz",yesenia.diaz@uni.edu,ADVISOR,Español,Maestría,Remoto,"Cuidados Intensivos","Cuidados Intensivos",Mañana
+"Yesenia Díaz",yesenia.diaz@uni.edu,ADVISOR,Español,Maestría,Remoto,"Cuidados Intensivos","Cuidados Intensivos",Tarde
+"Yesenia Díaz",yesenia.diaz@uni.edu,ADVISOR,Español,Maestría,Remoto,"Cuidados Intensivos","Cuidados Intensivos",Noche
+"Yesenia Díaz",yesenia.diaz@uni.edu,ADVISOR,Español,Maestría,Remoto,"Cuidados Intensivos","Medicina Interna",Mañana
+"Yesenia Díaz",yesenia.diaz@uni.edu,ADVISOR,Español,Maestría,Remoto,"Cuidados Intensivos","Medicina Interna",Tarde
+"Yesenia Díaz",yesenia.diaz@uni.edu,ADVISOR,Español,Maestría,Remoto,"Cuidados Intensivos","Medicina Interna",Noche
+"Nicolás Serrano",nicolas.serrano@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Anestesia Regional","Anestesia Regional",Tarde
+"Nicolás Serrano",nicolas.serrano@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Anestesia Regional","Anestesia Regional",Noche
+"Nicolás Serrano",nicolas.serrano@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Anestesia Regional","Anestesia Regional",Mañana
+"Nicolás Serrano",nicolas.serrano@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Anestesia Regional","Manejo del Dolor",Tarde
+"Nicolás Serrano",nicolas.serrano@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Anestesia Regional","Manejo del Dolor",Noche
+"Nicolás Serrano",nicolas.serrano@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Anestesia Regional","Manejo del Dolor",Mañana
+"Diana Méndez",diana.mendez@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Dermatología Estética","Dermatología Estética",Mañana
+"Diana Méndez",diana.mendez@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Dermatología Estética",Dermatopatología,Mañana
+"Elena Bautista",elena.bautista@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psiquiatría Infantil","Psiquiatría Infantil",Mañana
+"Elena Bautista",elena.bautista@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psiquiatría Infantil","Psiquiatría Infantil",Noche
+"Elena Bautista",elena.bautista@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psiquiatría Infantil","Psiquiatría Infantil",Tarde
+"Elena Bautista",elena.bautista@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psiquiatría Infantil","Terapia Cognitivo Conductual",Mañana
+"Elena Bautista",elena.bautista@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psiquiatría Infantil","Terapia Cognitivo Conductual",Noche
+"Elena Bautista",elena.bautista@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psiquiatría Infantil","Terapia Cognitivo Conductual",Tarde
+"Ubaldo Rosales",ubaldo.rosales@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Civil","Derecho Civil",Mañana
+"Ubaldo Rosales",ubaldo.rosales@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Civil",Contratos,Mañana
+"Wendy Ruiz",wendy.ruiz@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Penal","Derecho Penal",Noche
+"Wendy Ruiz",wendy.ruiz@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Penal","Derecho Penal",Tarde
+"Wendy Ruiz",wendy.ruiz@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Penal",Criminología,Noche
+"Wendy Ruiz",wendy.ruiz@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Penal",Criminología,Tarde
+"Belén Castro",belen.castro@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Laboral","Derecho Laboral",Tarde
+"Belén Castro",belen.castro@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Laboral","Derecho Laboral",Noche
+"Belén Castro",belen.castro@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Laboral","Derecho Laboral",Mañana
+"Belén Castro",belen.castro@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Laboral","Seguridad Social",Tarde
+"Belén Castro",belen.castro@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Laboral","Seguridad Social",Noche
+"Belén Castro",belen.castro@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Derecho Laboral","Seguridad Social",Mañana
+"Belén Mendoza",belen.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Mercantil","Derecho Mercantil",Noche
+"Belén Mendoza",belen.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Mercantil","Derecho Mercantil",Mañana
+"Belén Mendoza",belen.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Mercantil","Derecho Mercantil",Tarde
+"Belén Mendoza",belen.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Mercantil","Gobierno Corporativo",Noche
+"Belén Mendoza",belen.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Mercantil","Gobierno Corporativo",Mañana
+"Belén Mendoza",belen.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,"Derecho Mercantil","Gobierno Corporativo",Tarde
+"Álvaro Gallardo",alvaro.gallardo@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Puentes,Puentes,Mañana
+"Álvaro Gallardo",alvaro.gallardo@uni.edu,ADVISOR,Español,Doctorado,Híbrido,Puentes,"Análisis Estructural",Mañana
+"Mariana Serrano",mariana.serrano@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Ingeniería Geotécnica","Ingeniería Geotécnica",Mañana
+"Mariana Serrano",mariana.serrano@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Ingeniería Geotécnica","Ingeniería Geotécnica",Tarde
+"Mariana Serrano",mariana.serrano@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Ingeniería Geotécnica",Suelos,Mañana
+"Mariana Serrano",mariana.serrano@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Ingeniería Geotécnica",Suelos,Tarde
+"Esteban Núñez",esteban.nunez@uni.edu,ADVISOR,Español,Maestría,Remoto,Hidráulica,Hidráulica,Mañana
+"Esteban Núñez",esteban.nunez@uni.edu,ADVISOR,Español,Maestría,Remoto,Hidráulica,Hidráulica,Noche
+"Esteban Núñez",esteban.nunez@uni.edu,ADVISOR,Español,Maestría,Remoto,Hidráulica,Hidráulica,Tarde
+"Esteban Núñez",esteban.nunez@uni.edu,ADVISOR,Español,Maestría,Remoto,Hidráulica,"Gestión de Obras",Mañana
+"Esteban Núñez",esteban.nunez@uni.edu,ADVISOR,Español,Maestría,Remoto,Hidráulica,"Gestión de Obras",Noche
+"Esteban Núñez",esteban.nunez@uni.edu,ADVISOR,Español,Maestría,Remoto,Hidráulica,"Gestión de Obras",Tarde
+"Fernando Ibarra",fernando.ibarra@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Diseño Urbano","Diseño Urbano",Tarde
+"Fernando Ibarra",fernando.ibarra@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Diseño Urbano","Diseño Urbano",Noche
+"Fernando Ibarra",fernando.ibarra@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Diseño Urbano",Planificación,Tarde
+"Fernando Ibarra",fernando.ibarra@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Diseño Urbano",Planificación,Noche
+"Nicolás Valenzuela",nicolas.valenzuela@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura Sustentable","Arquitectura Sustentable",Mañana
+"Nicolás Valenzuela",nicolas.valenzuela@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura Sustentable","Arquitectura Sustentable",Tarde
+"Nicolás Valenzuela",nicolas.valenzuela@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura Sustentable","Eficiencia Energética",Mañana
+"Nicolás Valenzuela",nicolas.valenzuela@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Arquitectura Sustentable","Eficiencia Energética",Tarde
+"Ricardo Mendoza",ricardo.mendoza@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Psicología Clínica","Psicología Clínica",Noche
+"Ricardo Mendoza",ricardo.mendoza@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Psicología Clínica","Psicología Clínica",Tarde
+"Ricardo Mendoza",ricardo.mendoza@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Psicología Clínica","Psicología Clínica",Mañana
+"Ricardo Mendoza",ricardo.mendoza@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Psicología Clínica","Terapia Familiar",Noche
+"Ricardo Mendoza",ricardo.mendoza@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Psicología Clínica","Terapia Familiar",Tarde
+"Ricardo Mendoza",ricardo.mendoza@uni.edu,ADVISOR,Español,Maestría,Híbrido,"Psicología Clínica","Terapia Familiar",Mañana
+"Mariana Luna",mariana.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psicología Organizacional","Psicología Organizacional",Noche
+"Mariana Luna",mariana.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psicología Organizacional","Psicología Organizacional",Mañana
+"Mariana Luna",mariana.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psicología Organizacional","Psicología Organizacional",Tarde
+"Mariana Luna",mariana.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psicología Organizacional","Recursos Humanos",Noche
+"Mariana Luna",mariana.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psicología Organizacional","Recursos Humanos",Mañana
+"Mariana Luna",mariana.luna@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Psicología Organizacional","Recursos Humanos",Tarde
+"Daniel Pérez",daniel.perez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Economía Monetaria","Economía Monetaria",Noche
+"Daniel Pérez",daniel.perez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Economía Monetaria","Economía Monetaria",Mañana
+"Daniel Pérez",daniel.perez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Economía Monetaria","Economía Monetaria",Tarde
+"Daniel Pérez",daniel.perez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Economía Monetaria","Política Fiscal",Noche
+"Daniel Pérez",daniel.perez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Economía Monetaria","Política Fiscal",Mañana
+"Daniel Pérez",daniel.perez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Economía Monetaria","Política Fiscal",Tarde
+"Helena Gómez",helena.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Economía Experimental","Economía Experimental",Mañana
+"Helena Gómez",helena.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Economía Experimental","Economía Experimental",Noche
+"Helena Gómez",helena.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Economía Experimental","Economía Experimental",Tarde
+"Helena Gómez",helena.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Economía Experimental","Análisis de Datos",Mañana
+"Helena Gómez",helena.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Economía Experimental","Análisis de Datos",Noche
+"Helena Gómez",helena.gomez@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Economía Experimental","Análisis de Datos",Tarde
+"Héctor Reyes",hector.reyes@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Pintura Contemporánea","Pintura Contemporánea",Mañana
+"Héctor Reyes",hector.reyes@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Pintura Contemporánea","Pintura Contemporánea",Tarde
+"Héctor Reyes",hector.reyes@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Pintura Contemporánea","Pintura Contemporánea",Noche
+"Héctor Reyes",hector.reyes@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Pintura Contemporánea","Técnicas Mixtas",Mañana
+"Héctor Reyes",hector.reyes@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Pintura Contemporánea","Técnicas Mixtas",Tarde
+"Héctor Reyes",hector.reyes@uni.edu,ADVISOR,Español,Doctorado,Remoto,"Pintura Contemporánea","Técnicas Mixtas",Noche
+"Ricardo Benítez",ricardo.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Historia del Arte","Historia del Arte",Tarde
+"Ricardo Benítez",ricardo.benitez@uni.edu,ADVISOR,Español,Maestría,Presencial,"Historia del Arte",Museografía,Tarde
+"Álvaro Díaz",alvaro.diaz@uni.edu,ADVISOR,Español,Maestría,Presencial,"Mecánica Cuántica","Mecánica Cuántica",Tarde
+"Álvaro Díaz",alvaro.diaz@uni.edu,ADVISOR,Español,Maestría,Presencial,"Mecánica Cuántica","Mecánica Cuántica",Mañana
+"Álvaro Díaz",alvaro.diaz@uni.edu,ADVISOR,Español,Maestría,Presencial,"Mecánica Cuántica","Física de Partículas",Tarde
+"Álvaro Díaz",alvaro.diaz@uni.edu,ADVISOR,Español,Maestría,Presencial,"Mecánica Cuántica","Física de Partículas",Mañana
+"Alicia Mendoza",alicia.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,Astrofísica,Astrofísica,Noche
+"Alicia Mendoza",alicia.mendoza@uni.edu,ADVISOR,Español,Doctorado,Presencial,Astrofísica,Cosmología,Noche
+"Nicolás Ortiz",nicolas.ortiz@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Química Orgánica","Química Orgánica",Noche
+"Nicolás Ortiz",nicolas.ortiz@uni.edu,ADVISOR,Español,Doctorado,Híbrido,"Química Orgánica",Síntesis,Noche
+"Yadira Luna",yadira.luna@uni.edu,ADVISOR,Español,Maestría,Remoto,"Química Analítica","Química Analítica",Noche
+"Yadira Luna",yadira.luna@uni.edu,ADVISOR,Español,Maestría,Remoto,"Química Analítica","Química Analítica",Tarde
+"Yadira Luna",yadira.luna@uni.edu,ADVISOR,Español,Maestría,Remoto,"Química Analítica","Química Analítica",Mañana
+"Yadira Luna",yadira.luna@uni.edu,ADVISOR,Español,Maestría,Remoto,"Química Analítica",Espectroscopia,Noche
+"Yadira Luna",yadira.luna@uni.edu,ADVISOR,Español,Maestría,Remoto,"Química Analítica",Espectroscopia,Tarde
+"Yadira Luna",yadira.luna@uni.edu,ADVISOR,Español,Maestría,Remoto,"Química Analítica",Espectroscopia,Mañana
+"Antonio García",antonio.garcia@uni.edu,ADVISOR,Español,Maestría,Remoto,Programación,"Inteligencia Artificial",Tarde
+"Antonio García",antonio.garcia@uni.edu,ADVISOR,Español,Maestría,Remoto,Programación,Cloud,Tarde
+"Antonio García",antonio.garcia@uni.edu,ADVISOR,Español,Maestría,Remoto,"Ingeniería de Software","Inteligencia Artificial",Tarde
+"Antonio García",antonio.garcia@uni.edu,ADVISOR,Español,Maestría,Remoto,"Ingeniería de Software",Cloud,Tarde
+"Beatriz Santos",beatriz.santos@uni.edu,ADVISOR,Español,Maestría,Remoto,"Base de Datos",SQL,Tarde
+"Beatriz Santos",beatriz.santos@uni.edu,ADVISOR,Español,Maestría,Remoto,"Base de Datos","Base de datos",Tarde
+"David Herrera",david.herrera@uni.edu,ADVISOR,Español,Maestría,Remoto,Deportes,Futbol,Tarde
+"David Herrera",david.herrera@uni.edu,ADVISOR,Español,Maestría,Remoto,Deportes,Soccer,Tarde
+"David Herrera",david.herrera@uni.edu,ADVISOR,Español,Maestría,Remoto,Deportes,Basquetball,Tarde
+"GERARDO VILLARREAL AG�ERO",gerardo.villarrealag@uanl.edu.mx,STUDENT,Español,Maestría,Remoto,Programacion,Cloud,Tarde
+"GERARDO VILLARREAL AG�ERO",gerardo.villarrealag@uanl.edu.mx,STUDENT,Español,Maestría,Remoto,Programacion,UX/UI,Tarde
+"GERARDO VILLARREAL AG�ERO",gerardo.villarrealag@uanl.edu.mx,STUDENT,Español,Maestría,Remoto,Programacion,"Inteligencia Artificial",Tarde
+"GERARDO VILLARREAL AG�ERO",gerardo.villarrealag@uanl.edu.mx,STUDENT,Español,Maestría,Remoto,"Bases de datos",Cloud,Tarde
+"GERARDO VILLARREAL AG�ERO",gerardo.villarrealag@uanl.edu.mx,STUDENT,Español,Maestría,Remoto,"Bases de datos",UX/UI,Tarde
+"GERARDO VILLARREAL AG�ERO",gerardo.villarrealag@uanl.edu.mx,STUDENT,Español,Maestría,Remoto,"Bases de datos","Inteligencia Artificial",Tarde

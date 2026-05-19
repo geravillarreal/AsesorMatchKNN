@@ -104,7 +104,8 @@ def match():
     except ValueError as e:
         raise NotFound(str(e))
     
-    payload = [Recommendation(advisorId=r["advisorId"], name=r["name"], score=r["score"]).model_dump()
+    print(results)
+    payload = [Recommendation(advisorId=r["advisorId"], name=r["name"], score=r["score"], topics=r.get("topics", []), tokens=r.get("tokens", [])).model_dump()
                for r in results]
 
     return jsonify(payload), 200
